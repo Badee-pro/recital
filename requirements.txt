@@ -1,0 +1,5 @@
+fastembed>=0.9
+rank-bm25>=0.2.2
+numpy
+mlflow>=3
+ollama>=0.4
