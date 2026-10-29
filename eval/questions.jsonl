@@ -1,0 +1,24 @@
+{"id": "q01", "question": "How long do Lumen and Harbor have to keep each other's information secret after the NDA ends?", "gold": ["nda_harbor_lumen#5.2"], "expect": ["three"]}
+{"id": "q02", "question": "Within how many days must Northwind pay Quillon's invoices?", "gold": ["msa_northwind_quillon#2.1"], "expect": ["45"]}
+{"id": "q03", "question": "If Quillon gets hacked and Cirrus patient records leak, how quickly does Cirrus have to be told?", "gold": ["dpa_quillon_cirrus#4.1"], "expect": ["48"]}
+{"id": "q04", "question": "What uptime does Orbital promise Vantage?", "gold": ["saas_vantage_orbital#3.1"], "expect": ["99.9"]}
+{"id": "q05", "question": "What is the overall cap on damages in the Northwind-Quillon services agreement?", "gold": ["msa_northwind_quillon#7.2"], "expect": ["twelve"]}
+{"id": "q06", "question": "Can Orbital use the data Vantage uploads to train models it sells to other clients?", "gold": ["saas_vantage_orbital#4.1"], "expect": ["not"]}
+{"id": "q07", "question": "How much warning must Quillon give Cirrus before bringing in a new subcontractor that handles patient data?", "gold": ["dpa_quillon_cirrus#3.1"], "expect": ["30"]}
+{"id": "q08", "question": "Which state's law governs the Orbital subscription?", "gold": ["saas_vantage_orbital#8.1"], "expect": ["California"]}
+{"id": "q09", "question": "Can Northwind walk away from the services deal without giving a reason?", "gold": ["msa_northwind_quillon#8.3"], "expect": ["60"]}
+{"id": "q10", "question": "What must the recipient do if a court orders it to hand over the other side's secrets under the NDA?", "gold": ["nda_harbor_lumen#4.1"], "expect": ["ten"]}
+{"id": "q11", "question": "How much errors and omissions coverage does Quillon have to carry?", "gold": ["msa_northwind_quillon#9.1"], "expect": ["5,000,000"]}
+{"id": "q12", "question": "By how much can Orbital raise the price when the subscription renews?", "gold": ["saas_vantage_orbital#2.2"], "expect": ["7"]}
+{"id": "q13", "question": "Is Cirrus allowed to inspect Quillon's facilities, and how often?", "gold": ["dpa_quillon_cirrus#5.1"], "expect": ["once"]}
+{"id": "q14", "question": "Who owns the code Quillon writes specifically for Northwind?", "gold": ["msa_northwind_quillon#3.1"], "expect": ["own"]}
+{"id": "q15", "question": "Does the NDA stop either company from poaching the other's staff?", "gold": ["nda_harbor_lumen#8.1"], "expect": ["twelve"]}
+{"id": "q16", "question": "What encryption is required for Cirrus patient data stored on disk?", "gold": ["dpa_quillon_cirrus#2.1"], "expect": ["AES-256"]}
+{"id": "q17", "question": "What credit does Vantage get if the platform is up less than 99% of a month?", "gold": ["saas_vantage_orbital#3.2"], "expect": ["25"]}
+{"id": "q18", "question": "How are disagreements between Northwind and Quillon resolved if talks fail?", "gold": ["msa_northwind_quillon#10.1"], "expect": ["arbitration"]}
+{"id": "q19", "question": "Once the Vantage subscription ends, how long do they have to get their data out?", "gold": ["saas_vantage_orbital#4.3"], "expect": ["60"]}
+{"id": "q20", "question": "Can Orbital hand the subscription contract to a company that acquires it?", "gold": ["saas_vantage_orbital#7.1"], "expect": ["competitor"]}
+{"id": "q21", "question": "How long do confidentiality duties last under the Northwind-Quillon services agreement?", "gold": ["msa_northwind_quillon#4.1"], "expect": ["five"]}
+{"id": "q22", "question": "Which agreements renew automatically, and how much non-renewal notice does each require?", "gold": ["msa_northwind_quillon#8.1", "saas_vantage_orbital#5.1"], "expect": ["90", "60"]}
+{"id": "q23", "question": "What is the non-compete period for Orbital Insights' employees?", "gold": [], "expect": []}
+{"id": "q24", "question": "Does the Cirrus data processing addendum require Quillon to carry cyber insurance?", "gold": [], "expect": []}
