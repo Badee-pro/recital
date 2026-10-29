@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 
 from eval.run_eval import RESULTS_DIR, load_questions, retrieval_metrics, score_answer
 from rag.generate import MODEL, answer
+from rag.grounding import MIN_SIMILARITY
 from rag.index import CORPUS_DIR, EMBED_MODEL
 from rag.retrieve import METHODS, Retriever
 
@@ -93,7 +94,7 @@ def answer_endpoint(q: Query):
     chunks = search(q)  # deterministic, so this matches what /api/search showed
     start = time.perf_counter()
     try:
-        ans = answer(q.question, chunks)
+        ans = answer(q.question, chunks, top_similarity=retriever.top_similarity(q.question))
     except Exception:  # Ollama not running, or the model isn't pulled
         raise HTTPException(503, "The model couldn't answer. Is Ollama running? Open the Ollama app and try again.")
     return {
@@ -102,6 +103,8 @@ def answer_endpoint(q: Query):
         "answer": ans.marked_text or ans.text,
         "cited": ans.cited_chunk_ids,
         "usage": ans.usage,
+        "grounding": {"top_similarity": round(ans.top_similarity, 3), "threshold": MIN_SIMILARITY,
+                      "gated": ans.gated, "uncited": ans.uncited},
     }
 
 

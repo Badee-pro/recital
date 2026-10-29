@@ -52,6 +52,10 @@ class Retriever:
                 fused[idx] = fused.get(idx, 0.0) + 1.0 / (RRF_K + rank + 1)
         return sorted(fused, key=fused.get, reverse=True)
 
+    def top_similarity(self, query: str) -> float:
+        """Cosine similarity of the query to its closest clause, used as a relevance gate."""
+        return float((self.embeddings @ embed_query(query)).max())
+
     def search(self, query: str, k: int = 5, method: str = "dense") -> list[Chunk]:
         ranking = {
             "bm25": self._bm25_ranking,

@@ -1,0 +1,424 @@
+[
+  {
+    "id": "q01",
+    "question": "How long do Lumen and Harbor have to keep each other's information secret after the NDA ends?",
+    "answer": "Lumen and Harbor have to keep each other's information secret for three (3) years after the Agreement ends [A].",
+    "cited": [
+      "nda_harbor_lumen#5.2"
+    ],
+    "gold": [
+      "nda_harbor_lumen#5.2"
+    ],
+    "usage": {
+      "input_tokens": 584,
+      "output_tokens": 26
+    },
+    "top_similarity": 0.7759877443313599,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q02",
+    "question": "Within how many days must Northwind pay Quillon's invoices?",
+    "answer": "Invoices are due within forty-five (45) days [A].",
+    "cited": [
+      "msa_northwind_quillon#2.1"
+    ],
+    "gold": [
+      "msa_northwind_quillon#2.1"
+    ],
+    "usage": {
+      "input_tokens": 569,
+      "output_tokens": 16
+    },
+    "top_similarity": 0.8708474040031433,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q03",
+    "question": "If Quillon gets hacked and Cirrus patient records leak, how quickly does Cirrus have to be told?",
+    "answer": "Controller must be notified by Processor without undue delay, and no later than seventy-two (72) hours after becoming aware of the breach [C].",
+    "cited": [
+      "dpa_quillon_cirrus#4.2"
+    ],
+    "gold": [
+      "dpa_quillon_cirrus#4.1"
+    ],
+    "usage": {
+      "input_tokens": 519,
+      "output_tokens": 31
+    },
+    "top_similarity": 0.7550504207611084,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q04",
+    "question": "What uptime does Orbital promise Vantage?",
+    "answer": "Orbital promises Vantage 99.9% uptime in each calendar month, excluding scheduled maintenance [E].",
+    "cited": [
+      "saas_vantage_orbital#3.1"
+    ],
+    "gold": [
+      "saas_vantage_orbital#3.1"
+    ],
+    "usage": {
+      "input_tokens": 513,
+      "output_tokens": 25
+    },
+    "top_similarity": 0.7485660314559937,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q05",
+    "question": "What is the overall cap on damages in the Northwind-Quillon services agreement?",
+    "answer": "Each party's total liability arising out of this agreement shall not exceed the fees paid or payable by Customer under this agreement in the twelve (12) months before the event giving rise to the claim [C].",
+    "cited": [
+      "msa_northwind_quillon#7.2"
+    ],
+    "gold": [
+      "msa_northwind_quillon#7.2"
+    ],
+    "usage": {
+      "input_tokens": 538,
+      "output_tokens": 43
+    },
+    "top_similarity": 0.8008207678794861,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q06",
+    "question": "Can Orbital use the data Vantage uploads to train models it sells to other clients?",
+    "answer": "No, Orbital may not use the data Vantage uploads to train models offered to other customers [A].",
+    "cited": [
+      "saas_vantage_orbital#4.1"
+    ],
+    "gold": [
+      "saas_vantage_orbital#4.1"
+    ],
+    "usage": {
+      "input_tokens": 542,
+      "output_tokens": 23
+    },
+    "top_similarity": 0.8138766884803772,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q07",
+    "question": "How much warning must Quillon give Cirrus before bringing in a new subcontractor that handles patient data?",
+    "answer": "Processor must notify Controller at least thirty (30) days before adding or replacing a sub-processor [C].",
+    "cited": [
+      "dpa_quillon_cirrus#3.1"
+    ],
+    "gold": [
+      "dpa_quillon_cirrus#3.1"
+    ],
+    "usage": {
+      "input_tokens": 564,
+      "output_tokens": 24
+    },
+    "top_similarity": 0.8182356953620911,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q08",
+    "question": "Which state's law governs the Orbital subscription?",
+    "answer": "This Agreement is governed by the laws of the State of California [A].",
+    "cited": [
+      "saas_vantage_orbital#8.1"
+    ],
+    "gold": [
+      "saas_vantage_orbital#8.1"
+    ],
+    "usage": {
+      "input_tokens": 554,
+      "output_tokens": 16
+    },
+    "top_similarity": 0.7659636735916138,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q09",
+    "question": "Can Northwind walk away from the services deal without giving a reason?",
+    "answer": "Yes, Northwind can terminate the agreement for convenience by providing sixty (60) days' written notice and paying for services through the termination date [B].",
+    "cited": [
+      "msa_northwind_quillon#8.3"
+    ],
+    "gold": [
+      "msa_northwind_quillon#8.3"
+    ],
+    "usage": {
+      "input_tokens": 566,
+      "output_tokens": 33
+    },
+    "top_similarity": 0.7466236352920532,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q10",
+    "question": "What must the recipient do if a court orders it to hand over the other side's secrets under the NDA?",
+    "answer": "The Recipient must give the Discloser prompt written notice, to the extent legally permitted, at least ten (10) business days before disclosure, so that the Discloser may seek a protective order. The Recipient shall disclose only the portion of Confidential Information that its counsel advises is legally required [A].",
+    "cited": [
+      "nda_harbor_lumen#4.1"
+    ],
+    "gold": [
+      "nda_harbor_lumen#4.1"
+    ],
+    "usage": {
+      "input_tokens": 621,
+      "output_tokens": 63
+    },
+    "top_similarity": 0.6575846672058105,
+    "gated": false,
+    "uncited": [
+      "The Recipient must give the Discloser prompt written notice, to the extent legally permitted, at least ten (10) business days before disclosure, so that the Discloser may seek a protective order."
+    ]
+  },
+  {
+    "id": "q11",
+    "question": "How much errors and omissions coverage does Quillon have to carry?",
+    "answer": "Quillon Software, Inc. must maintain professional liability (errors and omissions) insurance of at least $5,000,000 in the aggregate throughout the term [A].",
+    "cited": [
+      "msa_northwind_quillon#9.1"
+    ],
+    "gold": [
+      "msa_northwind_quillon#9.1"
+    ],
+    "usage": {
+      "input_tokens": 490,
+      "output_tokens": 40
+    },
+    "top_similarity": 0.737882137298584,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q12",
+    "question": "By how much can Orbital raise the price when the subscription renews?",
+    "answer": "Orbital can raise the price by no more than the lesser of seven percent (7%) or the percentage increase in the U.S. Consumer Price Index over the preceding twelve months [A].",
+    "cited": [
+      "saas_vantage_orbital#2.2"
+    ],
+    "gold": [
+      "saas_vantage_orbital#2.2"
+    ],
+    "usage": {
+      "input_tokens": 578,
+      "output_tokens": 40
+    },
+    "top_similarity": 0.8309885263442993,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q13",
+    "question": "Is Cirrus allowed to inspect Quillon's facilities, and how often?",
+    "answer": "The provided clauses don't address this.",
+    "cited": [],
+    "gold": [
+      "dpa_quillon_cirrus#5.1"
+    ],
+    "usage": {
+      "input_tokens": 534,
+      "output_tokens": 9
+    },
+    "top_similarity": 0.6804647445678711,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q14",
+    "question": "Who owns the code Quillon writes specifically for Northwind?",
+    "answer": "Customer owns all deliverables, including the intellectual property rights in them, upon full payment for deliverables specifically created for Customer under an SOW [A].",
+    "cited": [
+      "msa_northwind_quillon#3.1"
+    ],
+    "gold": [
+      "msa_northwind_quillon#3.1"
+    ],
+    "usage": {
+      "input_tokens": 502,
+      "output_tokens": 32
+    },
+    "top_similarity": 0.7604531049728394,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q15",
+    "question": "Does the NDA stop either company from poaching the other's staff?",
+    "answer": "Yes, the NDA prevents either company from directly soliciting for employment any employee of the other party for twelve (12) months after the Effective Date [D].",
+    "cited": [
+      "nda_harbor_lumen#8.1"
+    ],
+    "gold": [
+      "nda_harbor_lumen#8.1"
+    ],
+    "usage": {
+      "input_tokens": 544,
+      "output_tokens": 35
+    },
+    "top_similarity": 0.6436706781387329,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q16",
+    "question": "What encryption is required for Cirrus patient data stored on disk?",
+    "answer": "AES-256 [A].",
+    "cited": [
+      "dpa_quillon_cirrus#2.1"
+    ],
+    "gold": [
+      "dpa_quillon_cirrus#2.1"
+    ],
+    "usage": {
+      "input_tokens": 530,
+      "output_tokens": 9
+    },
+    "top_similarity": 0.7410783767700195,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q17",
+    "question": "What credit does Vantage get if the platform is up less than 99% of a month?",
+    "answer": "The provided clauses don't address this.",
+    "cited": [],
+    "gold": [
+      "saas_vantage_orbital#3.2"
+    ],
+    "usage": {
+      "input_tokens": 591,
+      "output_tokens": 9
+    },
+    "top_similarity": 0.7981703877449036,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q18",
+    "question": "How are disagreements between Northwind and Quillon resolved if talks fail?",
+    "answer": "Any unresolved dispute shall be resolved by binding arbitration administered by the American Arbitration Association in New York, New York, before a single arbitrator [A].",
+    "cited": [
+      "msa_northwind_quillon#10.1"
+    ],
+    "gold": [
+      "msa_northwind_quillon#10.1"
+    ],
+    "usage": {
+      "input_tokens": 555,
+      "output_tokens": 32
+    },
+    "top_similarity": 0.7729977369308472,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q19",
+    "question": "Once the Vantage subscription ends, how long do they have to get their data out?",
+    "answer": "Upon termination, Vantage Retail Group has 60 days to export their Subscriber Data [A].",
+    "cited": [
+      "saas_vantage_orbital#4.3"
+    ],
+    "gold": [
+      "saas_vantage_orbital#4.3"
+    ],
+    "usage": {
+      "input_tokens": 512,
+      "output_tokens": 21
+    },
+    "top_similarity": 0.8441630005836487,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q20",
+    "question": "Can Orbital hand the subscription contract to a company that acquires it?",
+    "answer": "The provided clauses don't address this.",
+    "cited": [],
+    "gold": [
+      "saas_vantage_orbital#7.1"
+    ],
+    "usage": {
+      "input_tokens": 572,
+      "output_tokens": 9
+    },
+    "top_similarity": 0.7906274795532227,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q21",
+    "question": "How long do confidentiality duties last under the Northwind-Quillon services agreement?",
+    "answer": "Confidentiality duties last for five (5) years after termination of the Agreement [A].",
+    "cited": [
+      "msa_northwind_quillon#4.1"
+    ],
+    "gold": [
+      "msa_northwind_quillon#4.1"
+    ],
+    "usage": {
+      "input_tokens": 497,
+      "output_tokens": 20
+    },
+    "top_similarity": 0.9023621678352356,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q22",
+    "question": "Which agreements renew automatically, and how much non-renewal notice does each require?",
+    "answer": "The SaaS Subscription Agreement between Vantage Retail Group and Orbital Insights, Inc. [A] renews automatically, requiring 60 days' notice of non-renewal. The Master Services Agreement between Northwind Logistics Corp. and Quillon Software, Inc. [B] also renews automatically, but requires 90 days' notice of non-renewal.",
+    "cited": [
+      "saas_vantage_orbital#5.1",
+      "msa_northwind_quillon#8.1"
+    ],
+    "gold": [
+      "msa_northwind_quillon#8.1",
+      "saas_vantage_orbital#5.1"
+    ],
+    "usage": {
+      "input_tokens": 588,
+      "output_tokens": 77
+    },
+    "top_similarity": 0.7332490682601929,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q23",
+    "question": "What is the non-compete period for Orbital Insights' employees?",
+    "answer": "The provided clauses don't address this.",
+    "cited": [],
+    "gold": [],
+    "usage": {
+      "input_tokens": 589,
+      "output_tokens": 9
+    },
+    "top_similarity": 0.7510132789611816,
+    "gated": false,
+    "uncited": []
+  },
+  {
+    "id": "q24",
+    "question": "Does the Cirrus data processing addendum require Quillon to carry cyber insurance?",
+    "answer": "The provided clauses don't address this.",
+    "cited": [],
+    "gold": [],
+    "usage": {
+      "input_tokens": 535,
+      "output_tokens": 9
+    },
+    "top_similarity": 0.8224805593490601,
+    "gated": false,
+    "uncited": []
+  }
+]

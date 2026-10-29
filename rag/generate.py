@@ -10,6 +10,7 @@ import re
 from dataclasses import dataclass, field
 
 from .chunk import Chunk
+from .grounding import REFUSAL, is_relevant, uncited_sentences
 
 MODEL = "qwen2.5:7b"
 
@@ -45,13 +46,21 @@ class Answer:
     # Same answer with each [A]-style label replaced by "[n]", n = 1-based
     # position of the clause in the retrieved list, which is what the UI shows.
     marked_text: str = ""
+    top_similarity: float | None = None
+    gated: bool = False  # declined by the relevance gate; the model was never called
+    uncited: list[str] = field(default_factory=list)  # sentences with no clause label
 
     @property
     def cited_chunk_ids(self) -> list[str]:
         return list(dict.fromkeys(c.chunk_id for c in self.citations))
 
 
-def answer(question: str, chunks: list[Chunk]) -> Answer:
+def answer(question: str, chunks: list[Chunk], top_similarity: float | None = None) -> Answer:
+    """Answer from `chunks` only. Pass the question's `top_similarity` to apply the relevance gate."""
+    if top_similarity is not None and not is_relevant(top_similarity):
+        return Answer(text=REFUSAL, marked_text=REFUSAL, stop_reason="off_topic",
+                      top_similarity=top_similarity, gated=True)
+
     import ollama
 
     context = "\n\n".join(
@@ -83,4 +92,6 @@ def answer(question: str, chunks: list[Chunk]) -> Answer:
         stop_reason=response.done_reason,
         usage={"input_tokens": response.prompt_eval_count, "output_tokens": response.eval_count},
         marked_text=CITE_RE.sub(to_marker, text),
+        top_similarity=top_similarity,
+        uncited=uncited_sentences(text),
     )

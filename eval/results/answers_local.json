@@ -10,9 +10,12 @@
       "nda_harbor_lumen#5.2"
     ],
     "usage": {
-      "input_tokens": 585,
+      "input_tokens": 583,
       "output_tokens": 44
-    }
+    },
+    "top_similarity": 0.7759877443313599,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q02",
@@ -25,9 +28,12 @@
       "msa_northwind_quillon#2.1"
     ],
     "usage": {
-      "input_tokens": 520,
+      "input_tokens": 518,
       "output_tokens": 18
-    }
+    },
+    "top_similarity": 0.8708474040031433,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q03",
@@ -40,14 +46,17 @@
       "dpa_quillon_cirrus#4.1"
     ],
     "usage": {
-      "input_tokens": 575,
+      "input_tokens": 573,
       "output_tokens": 41
-    }
+    },
+    "top_similarity": 0.7550504207611084,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q04",
     "question": "What uptime does Orbital promise Vantage?",
-    "answer": "Orbital promises Vantage 99.9% uptime each calendar month, excluding scheduled maintenance [A].",
+    "answer": "Orbital promises Vantage 99.9% uptime each calendar month [A].",
     "cited": [
       "saas_vantage_orbital#3.1"
     ],
@@ -55,14 +64,17 @@
       "saas_vantage_orbital#3.1"
     ],
     "usage": {
-      "input_tokens": 582,
-      "output_tokens": 24
-    }
+      "input_tokens": 580,
+      "output_tokens": 20
+    },
+    "top_similarity": 0.7485660314559937,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q05",
     "question": "What is the overall cap on damages in the Northwind-Quillon services agreement?",
-    "answer": "The overall cap on damages is the fees paid or payable by Customer under the agreement in the twelve (12) months before the event giving rise to the claim [C].",
+    "answer": "The overall cap on damages is the fees paid or payable by Customer under this agreement in the twelve (12) months before the event giving rise to the claim [C].",
     "cited": [
       "msa_northwind_quillon#7.2"
     ],
@@ -70,9 +82,12 @@
       "msa_northwind_quillon#7.2"
     ],
     "usage": {
-      "input_tokens": 524,
+      "input_tokens": 522,
       "output_tokens": 36
-    }
+    },
+    "top_similarity": 0.8008207678794861,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q06",
@@ -85,9 +100,12 @@
       "saas_vantage_orbital#4.1"
     ],
     "usage": {
-      "input_tokens": 564,
+      "input_tokens": 562,
       "output_tokens": 23
-    }
+    },
+    "top_similarity": 0.8138766884803772,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q07",
@@ -100,9 +118,12 @@
       "dpa_quillon_cirrus#3.1"
     ],
     "usage": {
-      "input_tokens": 537,
+      "input_tokens": 535,
       "output_tokens": 24
-    }
+    },
+    "top_similarity": 0.8182356953620911,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q08",
@@ -115,9 +136,12 @@
       "saas_vantage_orbital#8.1"
     ],
     "usage": {
-      "input_tokens": 576,
+      "input_tokens": 574,
       "output_tokens": 16
-    }
+    },
+    "top_similarity": 0.7659636735916138,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q09",
@@ -130,14 +154,17 @@
       "msa_northwind_quillon#8.3"
     ],
     "usage": {
-      "input_tokens": 584,
+      "input_tokens": 582,
       "output_tokens": 27
-    }
+    },
+    "top_similarity": 0.7466236352920532,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q10",
     "question": "What must the recipient do if a court orders it to hand over the other side's secrets under the NDA?",
-    "answer": "The Recipient must give the Discloser prompt written notice, to the extent legally permitted, at least ten (10) business days before disclosure, so that the Discloser may seek a protective order. The Recipient shall disclose only the portion of Confidential Information that its counsel advises is legally required [A].",
+    "answer": "The Recipient must give the Discloser prompt written notice, to the extent legally permitted, at least ten (10) business days before disclosure, so that the Discloser may seek a protective order. The Recipient shall disclose only the portion of Confidential Information that its counsel advises is legally required. [A]",
     "cited": [
       "nda_harbor_lumen#4.1"
     ],
@@ -145,9 +172,14 @@
       "nda_harbor_lumen#4.1"
     ],
     "usage": {
-      "input_tokens": 623,
-      "output_tokens": 63
-    }
+      "input_tokens": 621,
+      "output_tokens": 64
+    },
+    "top_similarity": 0.6575846672058105,
+    "gated": false,
+    "uncited": [
+      "The Recipient must give the Discloser prompt written notice, to the extent legally permitted, at least ten (10) business days before disclosure, so that the Discloser may seek a protective order."
+    ]
   },
   {
     "id": "q11",
@@ -160,14 +192,17 @@
       "msa_northwind_quillon#9.1"
     ],
     "usage": {
-      "input_tokens": 520,
+      "input_tokens": 518,
       "output_tokens": 40
-    }
+    },
+    "top_similarity": 0.737882137298584,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q12",
     "question": "By how much can Orbital raise the price when the subscription renews?",
-    "answer": "Orbital can increase the price by no more than the lesser of seven percent (7%) or the percentage increase in the U.S. Consumer Price Index over the preceding twelve months [A].",
+    "answer": "Orbital can increase the fees by no more than the lesser of seven percent (7%) or the percentage increase in the U.S. Consumer Price Index over the preceding twelve months [A].",
     "cited": [
       "saas_vantage_orbital#2.2"
     ],
@@ -175,14 +210,17 @@
       "saas_vantage_orbital#2.2"
     ],
     "usage": {
-      "input_tokens": 517,
+      "input_tokens": 515,
       "output_tokens": 40
-    }
+    },
+    "top_similarity": 0.8309885263442993,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q13",
     "question": "Is Cirrus allowed to inspect Quillon's facilities, and how often?",
-    "answer": "Cirrus is allowed to conduct an on-site audit at its own expense, no more than once per year, unless the audit follows a Personal Data Breach, in which case the frequency limit does not apply [C].",
+    "answer": "Cirrus Health Partners may conduct an on-site audit at its own expense no more than once per year, unless the audit follows a Personal Data Breach, in which case the frequency limit does not apply [C].",
     "cited": [
       "dpa_quillon_cirrus#5.1"
     ],
@@ -190,9 +228,12 @@
       "dpa_quillon_cirrus#5.1"
     ],
     "usage": {
-      "input_tokens": 546,
-      "output_tokens": 46
-    }
+      "input_tokens": 544,
+      "output_tokens": 45
+    },
+    "top_similarity": 0.6804647445678711,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q14",
@@ -205,9 +246,12 @@
       "msa_northwind_quillon#3.1"
     ],
     "usage": {
-      "input_tokens": 533,
+      "input_tokens": 531,
       "output_tokens": 15
-    }
+    },
+    "top_similarity": 0.7604531049728394,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q15",
@@ -220,9 +264,12 @@
       "nda_harbor_lumen#8.1"
     ],
     "usage": {
-      "input_tokens": 532,
+      "input_tokens": 530,
       "output_tokens": 35
-    }
+    },
+    "top_similarity": 0.6436706781387329,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q16",
@@ -235,9 +282,12 @@
       "dpa_quillon_cirrus#2.1"
     ],
     "usage": {
-      "input_tokens": 519,
+      "input_tokens": 517,
       "output_tokens": 17
-    }
+    },
+    "top_similarity": 0.7410783767700195,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q17",
@@ -250,9 +300,12 @@
       "saas_vantage_orbital#3.2"
     ],
     "usage": {
-      "input_tokens": 571,
+      "input_tokens": 569,
       "output_tokens": 33
-    }
+    },
+    "top_similarity": 0.7981703877449036,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q18",
@@ -265,9 +318,12 @@
       "msa_northwind_quillon#10.1"
     ],
     "usage": {
-      "input_tokens": 523,
+      "input_tokens": 521,
       "output_tokens": 32
-    }
+    },
+    "top_similarity": 0.7729977369308472,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q19",
@@ -280,9 +336,12 @@
       "saas_vantage_orbital#4.3"
     ],
     "usage": {
-      "input_tokens": 534,
+      "input_tokens": 532,
       "output_tokens": 21
-    }
+    },
+    "top_similarity": 0.8441630005836487,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q20",
@@ -293,9 +352,12 @@
       "saas_vantage_orbital#7.1"
     ],
     "usage": {
-      "input_tokens": 551,
+      "input_tokens": 549,
       "output_tokens": 9
-    }
+    },
+    "top_similarity": 0.7906274795532227,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q21",
@@ -308,26 +370,31 @@
       "msa_northwind_quillon#4.1"
     ],
     "usage": {
-      "input_tokens": 563,
+      "input_tokens": 561,
       "output_tokens": 20
-    }
+    },
+    "top_similarity": 0.9023621678352356,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q22",
     "question": "Which agreements renew automatically, and how much non-renewal notice does each require?",
-    "answer": "The Master Services Agreement between Northwind Logistics Corp. and Quillon Software, Inc. renews automatically, requiring no non-renewal notice [A]. The SaaS Subscription Agreement between Vantage Retail Group and Orbital Insights, Inc. also renews automatically, but requires written notice at least sixty (60) days before the end of the current term [B].",
-    "cited": [
-      "msa_northwind_quillon#8.1",
-      "saas_vantage_orbital#5.1"
-    ],
+    "answer": "The SaaS Subscription Agreement (B) renews automatically with sixty (60) days' notice, while the Master Services Agreement (A) renews automatically with ninety (90) days' notice.",
+    "cited": [],
     "gold": [
       "msa_northwind_quillon#8.1",
       "saas_vantage_orbital#5.1"
     ],
     "usage": {
-      "input_tokens": 538,
-      "output_tokens": 76
-    }
+      "input_tokens": 536,
+      "output_tokens": 43
+    },
+    "top_similarity": 0.7332490682601929,
+    "gated": false,
+    "uncited": [
+      "The SaaS Subscription Agreement (B) renews automatically with sixty (60) days' notice, while the Master Services Agreement (A) renews automatically with ninety (90) days' notice."
+    ]
   },
   {
     "id": "q23",
@@ -336,9 +403,12 @@
     "cited": [],
     "gold": [],
     "usage": {
-      "input_tokens": 542,
+      "input_tokens": 540,
       "output_tokens": 9
-    }
+    },
+    "top_similarity": 0.7510132789611816,
+    "gated": false,
+    "uncited": []
   },
   {
     "id": "q24",
@@ -347,8 +417,11 @@
     "cited": [],
     "gold": [],
     "usage": {
-      "input_tokens": 537,
+      "input_tokens": 535,
       "output_tokens": 9
-    }
+    },
+    "top_similarity": 0.8224805593490601,
+    "gated": false,
+    "uncited": []
   }
 ]

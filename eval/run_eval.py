@@ -12,6 +12,7 @@ Generation metrics:
   answer_match        every expected key fact appears in the answer (string match)
   citation_hit        at least one citation points at a gold clause
   citation_precision  share of cited clauses that are gold
+  fully_cited         every sentence of the answer carries a clause citation
   abstain_correct     on unanswerable questions, the model says it can't answer
 """
 
@@ -56,7 +57,7 @@ def retrieval_metrics(retriever: Retriever, questions: list[dict], method: str) 
     return metrics, misses
 
 
-def score_answer(q: dict, answer_text: str, cited: list[str]) -> dict:
+def score_answer(q: dict, answer_text: str, cited: list[str], uncited: list[str] | None = None) -> dict:
     """Generation metrics for one question (see the module docstring)."""
     text = answer_text.lower()
     if not q["gold"]:
@@ -66,6 +67,7 @@ def score_answer(q: dict, answer_text: str, cited: list[str]) -> dict:
         "answer_match": float(all(e.lower() in text for e in q["expect"])),
         "citation_hit": float(bool(gold & set(cited))),
         "citation_precision": sum(c in gold for c in cited) / len(cited) if cited else 0.0,
+        **({} if uncited is None else {"fully_cited": float(not uncited)}),
     }
 
 
@@ -99,8 +101,9 @@ def answer_traced(retriever, question: dict, method: str, k: int):
         with mlflow.start_span(name="generate", span_type=SpanType.LLM) as span:
             span.set_inputs({"model": MODEL, "question": question["question"],
                              "clauses": [c.id for c in chunks]})
-            ans = answer(question["question"], chunks)
-            span.set_outputs({"answer": ans.text, "cited": ans.cited_chunk_ids, "usage": ans.usage})
+            ans = answer(question["question"], chunks, top_similarity=retriever.top_similarity(question["question"]))
+            span.set_outputs({"answer": ans.text, "cited": ans.cited_chunk_ids, "usage": ans.usage,
+                              "gated": ans.gated, "uncited": ans.uncited})
         root.set_outputs({"answer": ans.text, "cited": ans.cited_chunk_ids})
     return ans
 
@@ -113,14 +116,16 @@ def run_generation(retriever, questions, method: str, k: int):
     with mlflow.start_run(run_name=f"generation-local-{method}-k{k}"):
         mlflow.log_params(run_params("generation", method, k, MODEL))
 
-        rows, scores = [], {"answer_match": [], "citation_hit": [], "citation_precision": [], "abstain_correct": []}
+        rows, scores = [], {"answer_match": [], "citation_hit": [], "citation_precision": [],
+                            "fully_cited": [], "abstain_correct": []}
         for q in questions:
             ans = answer_traced(retriever, q, method, k)
             cited = ans.cited_chunk_ids
-            for name, value in score_answer(q, ans.text, cited).items():
+            for name, value in score_answer(q, ans.text, cited, ans.uncited).items():
                 scores[name].append(value)
             rows.append({"id": q["id"], "question": q["question"], "answer": ans.text,
-                         "cited": cited, "gold": q["gold"], "usage": ans.usage})
+                         "cited": cited, "gold": q["gold"], "usage": ans.usage,
+                         "top_similarity": ans.top_similarity, "gated": ans.gated, "uncited": ans.uncited})
             print(f"  {q['id']}  cited={cited}")
 
         metrics = {name: sum(v) / len(v) for name, v in scores.items() if v}
@@ -128,7 +133,10 @@ def run_generation(retriever, questions, method: str, k: int):
 
         # Save answers locally first so a tracking failure can never lose a run.
         RESULTS_DIR.mkdir(exist_ok=True)
-        answers_path = RESULTS_DIR / "answers_local.json"
+        # The default setup writes answers_local.json, which the web app's scores read;
+        # other settings get their own file so an experiment can't overwrite the baseline.
+        suffix = "" if (method, k) == ("dense", 5) else f"_{method}_k{k}"
+        answers_path = RESULTS_DIR / f"answers_local{suffix}.json"
         answers_path.write_text(json.dumps(rows, indent=2), encoding="utf-8")
         print(f"answers saved to {answers_path.relative_to(EVAL_DIR.parent)}")
 
@@ -146,6 +154,7 @@ def main():
     p.add_argument("--generate", action="store_true")
     p.add_argument("--method", choices=METHODS, default="dense")
     p.add_argument("--k", type=int, default=5)
+    p.add_argument("--skip-retrieval", action="store_true", help="don't re-log the retrieval comparison runs")
     args = p.parse_args()
 
     mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db"))
@@ -153,7 +162,8 @@ def main():
 
     retriever = Retriever()
     questions = load_questions()
-    run_retrieval(retriever, questions)
+    if not args.skip_retrieval:
+        run_retrieval(retriever, questions)
     if args.generate:
         print(f"\nGenerating answers ({args.method}, k={args.k})...")
         run_generation(retriever, questions, args.method, args.k)

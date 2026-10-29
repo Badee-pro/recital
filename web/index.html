@@ -99,6 +99,9 @@
   .status.err { color: var(--danger); }
   .a { font-size: 14.5px; line-height: 1.85; margin: 0 0 18px; }
   .a.none { color: var(--muted); font-style: italic; }
+  .nocite { text-decoration: underline dashed var(--danger); text-underline-offset: 4px; }
+  .ground { margin: -6px 0 16px; font-size: 11px; letter-spacing: .04em; color: var(--muted); border-left: 2px solid var(--line); padding: 2px 0 2px 10px; }
+  .ground.warn { color: var(--danger); border-left-color: var(--danger); }
   .cite { border: 0; background: none; padding: 0 2px; color: var(--gold); font-size: 10.5px; font-weight: 700; vertical-align: super; line-height: 1; }
   .cite::before { content: "["; } .cite::after { content: "]"; }
   .cite:hover { text-decoration: underline; }
@@ -252,6 +255,7 @@
       <li><b>Split by clause.</b> Each agreement is cut at its numbered clauses. Every clause keeps its agreement and section name.</li>
       <li><b>Retrieve.</b> The question is embedded with bge-small and compared with all clauses. Keyword (BM25) and hybrid search are available to compare.</li>
       <li><b>Answer.</b> A local qwen2.5:7b, served by Ollama, writes an answer from the retrieved clauses only and tags each sentence with its source. Tags that don't match a retrieved clause are discarded.</li>
+      <li><b>Check grounding in code.</b> If no clause is close in meaning to the question (similarity below 0.60), the model is never asked and the question is declined. Any answer sentence without a clause citation is underlined and flagged.</li>
       <li><b>Measure.</b> Every change is scored on hand-labelled questions and logged to MLflow.</li>
     </ol>
     <h4>Retrieval, by search method</h4>
@@ -356,15 +360,24 @@ function renderTurn(turn, question, ans, found) {
   const clauses = found.clauses;
   // A refusal is an uncited "don't address" answer; a cited answer that merely ends with that line isn't one.
   const none = !ans.cited.length && /don.t address/i.test(ans.answer);
-  const text = esc(ans.answer).replace(/\s*\[(\d+)\]/g, (m, n) => clauses[n - 1] ? `<button class="cite" data-n="${n}" title="${esc(refOf(clauses[n - 1]))}">${n}</button>` : "");
+  const g = ans.grounding || { uncited: [] };
+  let text = esc(ans.answer);
+  for (const s of g.uncited) text = text.replace(esc(s), `<span class="nocite" title="This sentence cites no clause">${esc(s)}</span>`);
+  text = text.replace(/\s*\[(\d+)\]/g, (m, n) => clauses[n - 1] ? `<button class="cite" data-n="${n}" title="${esc(refOf(clauses[n - 1]))}">${n}</button>` : "");
+  const groundNote = g.gated
+    ? `<div class="ground">Declined before asking the model: no clause is close to this question (similarity ${g.top_similarity.toFixed(2)}, needs ${g.threshold.toFixed(2)}).</div>`
+    : g.uncited.length
+      ? `<div class="ground warn">${g.uncited.length} sentence${g.uncited.length > 1 ? "s cite" : " cites"} no clause (underlined). Check before relying on ${g.uncited.length > 1 ? "them" : "it"}.</div>`
+      : "";
   const cited = clauses.filter((c) => ans.cited.includes(c.id));
   const others = clauses.filter((c) => !ans.cited.includes(c.id));
   const row = (c, isCited) => `<li class="${isCited ? "" : "uncited"}" data-n="${c.n}"><span class="i">${c.n}</span><span class="ref">${refOf(c)}</span><span class="sec">${esc(c.section.replace(/^\d+\.\s*/, ""))}</span><span class="tag">${isCited ? "Cited" : ""}</span></li>`;
   turn.innerHTML = `
     <div class="q">${esc(question)}</div>
     <p class="a${none ? " none" : ""}">${text}</p>
+    ${groundNote}
     <ol class="srcs">${cited.map((c) => row(c, true)).join("")}${others.map((c) => row(c, false)).join("")}</ol>
-    <div class="meta">${esc(ans.model)} · ${(ans.ms / 1000).toFixed(1)}s · ${(METHOD[$("#method").value] || "").toLowerCase()} search ${found.ms} ms</div>`;
+    <div class="meta">${g.gated ? "model not called" : esc(ans.model)} · ${(ans.ms / 1000).toFixed(1)}s · ${(METHOD[$("#method").value] || "").toLowerCase()} search ${found.ms} ms</div>`;
 
   const show = (n) => {
     const c = clauses[n - 1]; if (!c) return;

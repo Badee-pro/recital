@@ -11,6 +11,7 @@ Built by [Badee Khalbouss](https://badeekhalbouss.com).
 - **Grounded answers.** The model only sees the clauses retrieved for the question and is instructed to answer from them alone.
 - **Checkable citations.** Every sentence is tagged with its source clause. Tags that don't match a retrieved clause are discarded in code.
 - **Refuses instead of guessing.** If the agreements don't cover the question, it says "The provided clauses don't address this."
+- **Grounding checked in code, not just in the prompt.** Off-topic questions are declined before the model is ever called, and any answer sentence without a citation is flagged.
 - **Measured, not assumed.** A hand-labelled test set scores retrieval and answers, and every run is logged to MLflow.
 
 ## How it works
@@ -31,6 +32,7 @@ question ───────────────────────�
 | Keyword search | `rag/retrieve.py` | BM25 with a stopword list. Good at exact terms like "AES-256" or "SOC 2". |
 | Hybrid search | `rag/retrieve.py` | Reciprocal Rank Fusion of the two rankings. |
 | Generation | `rag/generate.py` | `qwen2.5:7b` via Ollama at temperature 0. Clauses are labelled `[A]..[E]`; the model must tag each sentence, and the code range-checks every tag. |
+| Grounding checks | `rag/grounding.py` | A relevance gate (declines when no clause is close to the question) and a citation-coverage check (flags sentences with no clause label). |
 | Web app | `app.py`, `web/index.html` | FastAPI backend and a single-page workspace: agreements on the left, the question thread in the middle, the source agreement on the right with the cited clause highlighted. |
 | Evaluation | `eval/` | 24 hand-labelled questions (22 answerable, 2 unanswerable), retrieval and answer metrics, every run logged to **MLflow** with a trace per question. |
 
@@ -51,12 +53,26 @@ hybrid      0.61   0.77   0.86   0.72
 
 ### Answers (embedding search, top 5)
 
-| run | facts correct | citation correct | refused correctly |
-|---|---|---|---|
-| clauses labelled `[1]..[5]` | 0.95 | 0.77 | 1.00 |
-| clauses labelled `[A]..[E]` | 0.91 | **0.95** | 1.00 |
+| run | facts correct | citation correct | fully cited | refused correctly |
+|---|---|---|---|---|
+| clauses labelled `[1]..[5]` | 0.95 | 0.77 | – | 1.00 |
+| clauses labelled `[A]..[E]` | 0.91 | **0.95** | – | 1.00 |
+| + grounding checks, final prompt | **0.95** | 0.91 | 0.91 | 1.00 |
 
-**Finding: label collisions caused wrong citations.** With numeric labels, the model got the facts right but cited a neighbouring clause 4 times (e.g. 2.3 for a fact in 2.1): clause text already contains numbers like `2.1`, and the model confused them with the `[2]` label. Letter labels fixed all four. One regression remains: on q22 the model says the MSA auto-renews with "no non-renewal notice" (it's 90 days), a factual slip from a small model that a faithfulness check would catch. Raw answers are in `eval/results/`.
+**Finding: label collisions caused wrong citations.** With numeric labels, the model got the facts right but cited a neighbouring clause 4 times (e.g. 2.3 for a fact in 2.1): clause text already contains numbers like `2.1`, and the model confused them with the `[2]` label. Letter labels fixed all four.
+
+**Finding: the coverage check catches what the score hides.** A small prompt rewording in the final run fixed a factual error (q22 now gets both renewal terms right: 90 and 60 days) but on that answer the model wrote its sources as `(A)`/`(B)` instead of `[A]`/`[B]`. The citation-coverage check flagged exactly that answer and one sentence in q10, so the UI underlines them instead of presenting them as sourced. The parser deliberately stays strict: legal text uses `(a)`/`(b)` for sub-clauses, so accepting parentheses would risk false citations. Raw answers are in `eval/results/`.
+
+### Grounding checks
+
+The relevance threshold was set from data, not guessed. Cosine similarity between a question and its closest clause:
+
+| questions | closest-clause similarity |
+|---|---|
+| the 22 real contract questions | 0.64 – 0.90 |
+| off-topic ("weather in Toronto", "tell me a joke", "explain quantum computing", …) | 0.40 – 0.54 |
+
+The gate is set at **0.60**, in the gap. Off-topic questions are declined without calling the model, and every real test question passes. Questions that are on-topic but unanswerable (e.g. a non-compete period the agreements never mention) still reach the model, which declines them itself: 100% on the test set.
 
 ## Run it
 
@@ -91,6 +107,7 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db               # browse runs at
 - `answer_match`: every expected key fact (e.g. "48", "AES-256") appears in the answer.
 - `citation_hit`: at least one citation points at a correct clause.
 - `citation_precision`: share of cited clauses that are correct. This is the "did it cite the right agreement?" check.
+- `fully_cited`: every sentence of the answer carries a clause citation.
 - `abstain_correct`: on unanswerable questions, does it decline instead of inventing an answer?
 
 String matching is a deliberately simple grader; see the roadmap.
