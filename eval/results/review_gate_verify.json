@@ -1,0 +1,70 @@
+[
+  {
+    "clause_id": "dpa_quillon_cirrus#9.1",
+    "outcome": "false_alarm",
+    "check": "liability",
+    "severity": "medium",
+    "reason": "The cap is below the standard position of a mutual cap of 12 months' fees or more, and it is one-sided, applying only to Processor."
+  },
+  {
+    "clause_id": "msa_northwind_quillon#7.1",
+    "outcome": "false_alarm",
+    "check": "liability",
+    "severity": "high",
+    "reason": "Excludes indirect, incidental, special, consequential, and punitive damages, which are typically recoverable in most jurisdictions."
+  },
+  {
+    "clause_id": "msa_northwind_quillon#8.1",
+    "outcome": "caught",
+    "check": "auto_renewal",
+    "severity": "medium",
+    "reason": "This clause creates an ongoing obligation without mutual agreement, which could be risky for the company. It states: 'renews automatically for successive one (1) year terms unless either party gives notice of non-renewal at least ninety (90) days before the end of the then-current term.'"
+  },
+  {
+    "clause_id": "saas_vantage_orbital#5.1",
+    "outcome": "caught",
+    "check": "auto_renewal",
+    "severity": "medium",
+    "reason": "This clause could be seen as unfair as it may trap one party into an ongoing contract without the ability to terminate unless they give notice, which could be burdensome."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#2.2",
+    "outcome": "caught",
+    "check": "unilateral_change",
+    "severity": "high",
+    "reason": "Vendor can change terms without consent and without a cap, exposing Customer to potentially significant increases in fees."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#3.1",
+    "outcome": "caught",
+    "check": "data_use",
+    "severity": "high",
+    "reason": "Permits Vendor to use Customer Data for its own purposes, such as training machine-learning models, which could expose Customer to privacy risks and potential legal liabilities."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#4.1",
+    "outcome": "caught",
+    "check": "auto_renewal",
+    "severity": "medium",
+    "reason": "This clause creates a risk as it allows automatic renewal without both parties' agreement, which could be unfavorable for the Customer. The key phrase is 'renews automatically unless Customer gives notice of non-renewal.'"
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#4.2",
+    "outcome": "missed",
+    "check": "termination"
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#5.1",
+    "outcome": "caught",
+    "check": "liability",
+    "severity": "high",
+    "reason": "Vendor's liability is capped below 12 months' fees, which is below standard. Customer's liability is unlimited, creating a one-sided risk."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#5.2",
+    "outcome": "caught",
+    "check": "indemnity",
+    "severity": "high",
+    "reason": "The clause is one-sided, requiring Customer to indemnify Vendor for all claims without limit, 'arising out of or relating to Customer's use of the Services.'"
+  }
+]

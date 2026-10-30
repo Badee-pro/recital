@@ -1,0 +1,114 @@
+[
+  {
+    "clause_id": "dpa_quillon_cirrus#1.2",
+    "outcome": "false_alarm",
+    "check": "data_use",
+    "severity": "medium",
+    "reason": "Permits Processor to use special categories of data, which could include sensitive information like diagnoses, unless explicitly prohibited."
+  },
+  {
+    "clause_id": "dpa_quillon_cirrus#4.2",
+    "outcome": "either",
+    "check": "breach_notice",
+    "severity": "medium",
+    "reason": "This clause could delay notification to regulators or data subjects, which is against standard practices. 'unless required by law' is a narrow exception."
+  },
+  {
+    "clause_id": "dpa_quillon_cirrus#9.1",
+    "outcome": "false_alarm",
+    "check": "liability",
+    "severity": "medium",
+    "reason": "The cap is higher than the standard 12 months' fees and is one-sided, benefiting the Processor."
+  },
+  {
+    "clause_id": "msa_northwind_quillon#2.3",
+    "outcome": "false_alarm",
+    "check": "breach_notice",
+    "severity": "medium",
+    "reason": "The breach notification is slower than the standard 72 hours or 'without undue delay'. The 15-day period for dispute resolution is also longer than typical."
+  },
+  {
+    "clause_id": "msa_northwind_quillon#7.1",
+    "outcome": "false_alarm",
+    "check": "liability",
+    "severity": "high",
+    "reason": "Excludes indirect, incidental, special, consequential, and punitive damages, which are significant risks not limited to direct damages."
+  },
+  {
+    "clause_id": "msa_northwind_quillon#8.1",
+    "outcome": "caught",
+    "check": "auto_renewal",
+    "severity": "medium",
+    "reason": "This clause creates an ongoing obligation without mutual agreement, which could expose the party to continued financial liability without the ability to terminate the agreement."
+  },
+  {
+    "clause_id": "msa_northwind_quillon#8.3",
+    "outcome": "either",
+    "check": "termination",
+    "severity": "medium",
+    "reason": "One-sided termination without cause. 'Customer may terminate this Agreement or any SOW for convenience on sixty (60) days' written notice, provided Customer pays for Services performed through the termination date.'"
+  },
+  {
+    "clause_id": "saas_vantage_orbital#5.1",
+    "outcome": "caught",
+    "check": "auto_renewal",
+    "severity": "medium",
+    "reason": "This clause creates a risk as it obligates the party to renew the agreement unless they give notice, which could be burdensome and unexpected."
+  },
+  {
+    "clause_id": "saas_vantage_orbital#6.1",
+    "outcome": "false_alarm",
+    "check": "liability",
+    "severity": "medium",
+    "reason": "This clause is one-sided as it does not cap the Vendor's liability for data breaches, which could expose the Subscriber to significant risk."
+  },
+  {
+    "clause_id": "saas_vantage_orbital#6.2",
+    "outcome": "false_alarm",
+    "check": "data_use",
+    "severity": "medium",
+    "reason": "This clause caps the vendor's liability, which is worse than the standard position of unlimited liability for breaches of data use, as it limits the financial exposure of the vendor."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#2.2",
+    "outcome": "caught",
+    "check": "unilateral_change",
+    "severity": "high",
+    "reason": "Vendor can change terms without consent and without a cap, exposing Customer to potentially significant increases in fees."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#3.1",
+    "outcome": "caught",
+    "check": "data_use",
+    "severity": "high",
+    "reason": "Permits Vendor to use Customer Data for its own purposes, such as training machine-learning models, which could expose Customer to privacy risks and potential legal liabilities."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#4.1",
+    "outcome": "caught",
+    "check": "auto_renewal",
+    "severity": "medium",
+    "reason": "This clause creates an ongoing obligation for the Customer without a clear opt-out mechanism, which could be burdensome."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#4.2",
+    "outcome": "caught",
+    "check": "termination",
+    "severity": "high",
+    "reason": "Vendor can terminate at will without cause, while Customer can only terminate for material breach. This is one-sided and creates a significant risk."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#5.1",
+    "outcome": "caught",
+    "check": "liability",
+    "severity": "high",
+    "reason": "Vendor's liability is capped below 12 months' fees, which is below standard. Customer's liability is unlimited, creating a one-sided risk."
+  },
+  {
+    "clause_id": "vendor_acme_birchwood#5.2",
+    "outcome": "caught",
+    "check": "indemnity",
+    "severity": "high",
+    "reason": "The clause is one-sided, requiring the customer to indemnify without limit: 'Customer shall indemnify, defend and hold harmless Vendor against any and all claims, losses, damages and expenses.'"
+  }
+]

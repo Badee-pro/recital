@@ -1,7 +1,8 @@
 """Evaluate the AI risk review against hand labels and log each run to MLflow.
 
-    python -m eval.run_review_eval                  # the shipped setup, ~10 min on CPU
+    python -m eval.run_review_eval                  # the shipped setup (verify), ~10 min on CPU
     python -m eval.run_review_eval --ablation       # + with each safeguard turned off
+    python -m eval.run_review_eval --setup verify   # one setup
 
 Corpus: the four agreements plus eval/review_fixtures/ (a deliberately one-sided
 vendor agreement; the four real ones are fairly balanced, so on their own they'd
@@ -34,6 +35,7 @@ FIXTURES_DIR = EVAL_DIR / "review_fixtures"
 CONFIGS = {
     "first_pass_only": (False, False),
     "gate": (True, False),
+    "verify": (False, True),
     "gate_verify": (True, True),
 }
 
@@ -93,6 +95,7 @@ def run(name: str, chunks, embeddings, labels):
 def main():
     p = argparse.ArgumentParser()
     p.add_argument("--ablation", action="store_true", help="also run with each safeguard turned off")
+    p.add_argument("--setup", choices=CONFIGS, help="run one setup only")
     args = p.parse_args()
 
     mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "sqlite:///mlflow.db"))
@@ -105,7 +108,7 @@ def main():
     labels = load_labels()
 
     results = {}
-    for name in (CONFIGS if args.ablation else ["gate_verify"]):
+    for name in (CONFIGS if args.ablation else [args.setup or "verify"]):
         print(f"\n{name}")
         results[name] = run(name, chunks, embeddings, labels)
 

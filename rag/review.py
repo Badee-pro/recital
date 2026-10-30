@@ -25,10 +25,12 @@ from .index import ROOT, embed_query
 
 FLAGS_PATH = ROOT / "data" / "flags.json"
 CLAUSES_PER_CHECK = 3
-# Clauses less similar than this to a check are about something else and never
-# reach the model. Measured on this corpus: on-topic clauses score 0.63-0.76;
-# off-topic ones that slipped into the top 3 (an invoice-dispute clause for
-# "breach notice") score 0.56-0.61.
+# Optional similarity gate on candidate clauses, OFF by default. It was set at
+# 0.62 from the four original agreements (on-topic 0.63-0.76, off-topic
+# 0.56-0.61), but on the labelled fixture a real risk scored 0.611 and was
+# dropped. The verification call already rejects off-topic clauses, and with
+# it the gate removed no false alarms, so it only cost recall. Kept for the
+# ablation in eval/run_review_eval.py.
 MIN_CHECK_SIMILARITY = 0.62
 SEVERITIES = ("high", "medium", "low")
 
@@ -135,7 +137,7 @@ def _now() -> str:
 
 # --- review -----------------------------------------------------------------
 
-def candidates(chunks: list[Chunk], embeddings: np.ndarray, doc_id: str, query: str, gate: bool = True) -> list[Chunk]:
+def candidates(chunks: list[Chunk], embeddings: np.ndarray, doc_id: str, query: str, gate: bool = False) -> list[Chunk]:
     idx = [i for i, c in enumerate(chunks) if c.doc_id == doc_id]
     scores = embeddings[idx] @ embed_query(query)
     return [chunks[idx[j]] for j in np.argsort(-scores)[:CLAUSES_PER_CHECK]
@@ -236,7 +238,7 @@ def confirm(check: dict, clause: Chunk) -> bool:
 
 
 def find_flags(chunks: list[Chunk], embeddings: np.ndarray, doc_id: str, on_progress=None,
-               gate: bool = True, verify: bool = True) -> list[dict]:
+               gate: bool = False, verify: bool = True) -> list[dict]:
     """Run every check on one agreement and return its flags, without storing them."""
     flags = []
     for i, check in enumerate(CHECKS):

@@ -26,8 +26,8 @@ A 7B local model is fast and private, but it guesses, mislabels and over-flags. 
 | Whether a question is answerable at all | Similarity gate, 0.60 (`rag/grounding.py`) | Threshold read off measured data; off-topic questions never reach the model. |
 | Whether a citation is real | Code range-checks every `[A]` label (`rag/generate.py`) | Labels pointing at clauses the model wasn't shown are dropped. |
 | Whether an answer is fully sourced | Sentence-level coverage check | Caught a format slip that the accuracy score hid (see Results). |
-| Which clauses a risk check may look at | Similarity gate, 0.62 (`rag/review.py`) | Stops the model judging clauses about other topics. |
-| Whether a proposed risk flag survives | Second, single-clause verification call | The first pass over-flags protective clauses (see Results). |
+| Which clauses a risk check may look at | Embedding search within one agreement (`rag/review.py`) | The model judges 3 candidate clauses per check, never the whole contract. |
+| Whether a proposed risk flag survives | Second, single-clause verification call | Cut false alarms from 6 to 2 on the labelled set (see Results). |
 | Whether a flag is a real risk | **A lawyer**, in the review queue | The model only proposes; dismissed flags stay dismissed. |
 | Whether any of it works | Hand-labelled test sets, logged to MLflow | 24 Q&A questions and a labelled risk set, every setting compared. |
 
@@ -50,7 +50,7 @@ question ───────────────────────�
 | Hybrid search | `rag/retrieve.py` | Reciprocal Rank Fusion of the two rankings. |
 | Generation | `rag/generate.py` | `qwen2.5:7b` via Ollama at temperature 0. Clauses are labelled `[A]..[E]`; the model must tag each sentence, and the code range-checks every tag. |
 | Grounding checks | `rag/grounding.py` | A relevance gate (declines when no clause is close to the question) and a citation-coverage check (flags sentences with no clause label). |
-| Risk review | `rag/review.py` | 7 checks, each with the market-standard position spelled out. Candidate clauses come from embedding search within one agreement, gated at 0.62; the model returns JSON per clause, labels are range-checked, and each proposed flag is re-verified on its own. |
+| Risk review | `rag/review.py` | 7 checks, each with the market-standard position spelled out. Candidate clauses come from embedding search within one agreement; the model returns JSON per clause, labels are range-checked, and each proposed flag is re-verified on its own. At most one flag per clause. |
 | Review queue | `app.py`, `data/flags.json` | Reviews run on one background worker thread (the local model serves one request at a time). Lawyers' decisions survive re-reviews. Writes are atomic (temp file + rename). |
 | Upload | `app.py` | Validates the file actually yields numbered clauses, rebuilds the index, swaps the retriever under a lock, and queues a review. |
 | Web app | `app.py`, `frontend/` | FastAPI backend and a **React 19 + TypeScript** (strict) single-page app built with Vite: agreements on the left, the question thread or review queue in the middle, the source agreement on the right with the cited or flagged clause highlighted. No UI library; state lives in plain hooks (`useReview` polls background jobs only while one is running). |
@@ -93,6 +93,23 @@ The relevance threshold was set from data, not guessed. Cosine similarity betwee
 | off-topic ("weather in Toronto", "tell me a joke", "explain quantum computing", …) | 0.40 – 0.54 |
 
 The gate is set at **0.60**, in the gap. Off-topic questions are declined without calling the model, and every real test question passes. Questions that are on-topic but unanswerable (e.g. a non-compete period the agreements never mention) still reach the model, which declines them itself: 100% on the test set.
+
+### Risk review (5 agreements, 8 risky clauses, 23 look-risky-but-standard clauses)
+
+Each safeguard was switched off in turn (`python -m eval.run_review_eval --ablation`):
+
+| setup | recall | precision | false alarms | traps flagged |
+|---|---|---|---|---|
+| first pass only | **1.00** | 0.57 | 6 | 6 |
+| + similarity gate (0.62) | 0.88 | 0.54 | 6 | 6 |
+| + verification call (**shipped**) | **1.00** | **0.80** | **2** | **2** |
+| + gate + verification | 0.88 | 0.78 | 2 | 2 |
+
+**Finding: one prompt can't tell a protective clause from a risky one.** With several clauses in view, the model flagged a clause *forbidding* the processing of sensitive data (DPA §1.2) and a $2M data-breach cap (SaaS §6.2) as "provider use of customer data", and a 15-day invoice-dispute window (MSA §2.3) as "slow breach notice". During development it also flagged a ban on training with customer data and a 7%-capped price increase. A second call that looks at one proposed flag at a time, and asks whether it is on-topic and worse than the stated market standard, removed 4 of the 6 false alarms without losing a single real risk.
+
+**Finding: a threshold that worked for Q&A didn't transfer.** The candidate-clause gate was set like the Q&A relevance gate, from measured scores on the four agreements (on-topic 0.63–0.76, off-topic 0.56–0.61). On the labelled fixture, a vendor's right to terminate on 5 days' notice scored 0.611 against its check and was dropped, so the gate cost recall, and the model found a different false alarm in its place. Unlike Q&A questions, risk checks and clauses share vocabulary, so the score ranges overlap. The verification call already rejects off-topic clauses, so the gate is off by default and kept only for this comparison.
+
+**Still wrong:** the two remaining false alarms are both liability clauses: a mutual exclusion of consequential damages (MSA §7.1) and a 3×-fees cap for data breaches (DPA §9.1), which is higher than standard and favours the customer. The 7B model reads "excludes damages" and "cap" as risky regardless of the stated standard. These are exactly what the review queue is for: a lawyer dismisses them once and they don't come back. Raw results per clause are in `eval/results/review_*.json`.
 
 ## Run it
 
