@@ -13,6 +13,23 @@ Built by [Badee Khalbouss](https://badeekhalbouss.com).
 - **Refuses instead of guessing.** If the agreements don't cover the question, it says "The provided clauses don't address this."
 - **Grounding checked in code, not just in the prompt.** Off-topic questions are declined before the model is ever called, and any answer sentence without a citation is flagged.
 - **Measured, not assumed.** A hand-labelled test set scores retrieval and answers, and every run is logged to MLflow.
+- **AI risk review, lawyer decides.** Each agreement is checked for risky terms; flagged clauses go to a review queue where a lawyer confirms or dismisses them.
+- **Upload agreements.** Add a Markdown agreement from the sidebar; it's indexed and reviewed automatically.
+
+## The language model is one part, not the system
+
+A 7B local model is fast and private, but it guesses, mislabels and over-flags. Recital is built so that the model never has the last word: everything it produces passes through checks in ordinary code, and every check was added because a measurement showed a specific failure.
+
+| Decision | Made by | Why not just the model |
+|---|---|---|
+| Which clauses are relevant | Embedding search (`rag/retrieve.py`) | Measured against 3 search methods; the model never searches. |
+| Whether a question is answerable at all | Similarity gate, 0.60 (`rag/grounding.py`) | Threshold read off measured data; off-topic questions never reach the model. |
+| Whether a citation is real | Code range-checks every `[A]` label (`rag/generate.py`) | Labels pointing at clauses the model wasn't shown are dropped. |
+| Whether an answer is fully sourced | Sentence-level coverage check | Caught a format slip that the accuracy score hid (see Results). |
+| Which clauses a risk check may look at | Similarity gate, 0.62 (`rag/review.py`) | Stops the model judging clauses about other topics. |
+| Whether a proposed risk flag survives | Second, single-clause verification call | The first pass over-flags protective clauses (see Results). |
+| Whether a flag is a real risk | **A lawyer**, in the review queue | The model only proposes; dismissed flags stay dismissed. |
+| Whether any of it works | Hand-labelled test sets, logged to MLflow | 24 Q&A questions and a labelled risk set, every setting compared. |
 
 ## How it works
 
@@ -33,8 +50,11 @@ question ───────────────────────�
 | Hybrid search | `rag/retrieve.py` | Reciprocal Rank Fusion of the two rankings. |
 | Generation | `rag/generate.py` | `qwen2.5:7b` via Ollama at temperature 0. Clauses are labelled `[A]..[E]`; the model must tag each sentence, and the code range-checks every tag. |
 | Grounding checks | `rag/grounding.py` | A relevance gate (declines when no clause is close to the question) and a citation-coverage check (flags sentences with no clause label). |
-| Web app | `app.py`, `web/index.html` | FastAPI backend and a single-page workspace: agreements on the left, the question thread in the middle, the source agreement on the right with the cited clause highlighted. |
-| Evaluation | `eval/` | 24 hand-labelled questions (22 answerable, 2 unanswerable), retrieval and answer metrics, every run logged to **MLflow** with a trace per question. |
+| Risk review | `rag/review.py` | 7 checks, each with the market-standard position spelled out. Candidate clauses come from embedding search within one agreement, gated at 0.62; the model returns JSON per clause, labels are range-checked, and each proposed flag is re-verified on its own. |
+| Review queue | `app.py`, `data/flags.json` | Reviews run on one background worker thread (the local model serves one request at a time). Lawyers' decisions survive re-reviews. Writes are atomic (temp file + rename). |
+| Upload | `app.py` | Validates the file actually yields numbered clauses, rebuilds the index, swaps the retriever under a lock, and queues a review. |
+| Web app | `app.py`, `frontend/` | FastAPI backend and a **React 19 + TypeScript** (strict) single-page app built with Vite: agreements on the left, the question thread or review queue in the middle, the source agreement on the right with the cited or flagged clause highlighted. No UI library; state lives in plain hooks (`useReview` polls background jobs only while one is running). |
+| Evaluation | `eval/` | 24 hand-labelled questions (22 answerable, 2 unanswerable) and a hand-labelled risk set; every run logged to **MLflow**. |
 
 The corpus is 4 fictional agreements (NDA, MSA, DPA, SaaS) with 67 clauses. They deliberately overlap: three of them define a confidentiality term, a liability cap and a governing law, each with *different* values. Pulling the wrong agreement's clause is the most common way legal RAG fails, so the test set is built around it.
 
@@ -76,7 +96,7 @@ The gate is set at **0.60**, in the gap. Off-topic questions are declined withou
 
 ## Run it
 
-Requires Python 3.10+ and [Ollama](https://ollama.com).
+Requires Python 3.10+, [Node.js](https://nodejs.org) 18+ and [Ollama](https://ollama.com).
 
 ```bash
 python -m venv .venv
@@ -85,10 +105,13 @@ pip install -r requirements.txt
 ollama pull qwen2.5:7b          # ~4.7 GB, one time
 
 python -m rag.build             # chunk + embed the contracts
+cd frontend && npm install && npm run build && cd ..   # build the React UI, one time
 python app.py                   # web app at http://localhost:8000
 ```
 
-On Windows you can double-click `recital.bat` instead of `python app.py`.
+On Windows you can double-click `recital.bat` instead; it builds the UI on first run.
+
+Working on the UI: run `python app.py`, then `npm run dev` in `frontend/` for hot reload at http://localhost:5173 (API calls are proxied to :8000).
 
 Other entry points:
 
@@ -96,8 +119,12 @@ Other entry points:
 python ask.py "How fast must Cirrus be told about a breach?"   # command line
 python -m eval.run_eval                                         # retrieval evaluation, seconds
 python -m eval.run_eval --generate                              # + 24 answers, ~10 min on CPU
+python -m rag.review [doc_id]                                   # AI risk review from the command line
+python -m eval.run_review_eval --ablation                       # score the risk review, ~30 min on CPU
 mlflow ui --backend-store-uri sqlite:///mlflow.db               # browse runs at http://localhost:5000
 ```
+
+**In the web app:** *Review queue* (top bar) lists open flags by severity. Click a flag's clause reference to open the agreement with that clause highlighted, add a note, then *Confirm risk* or *Dismiss*. *Run AI review* in the agreement viewer re-reviews one agreement. *Upload agreement* (sidebar) takes a `.md` or `.txt` file with a `# Title`, `## 1. Section` headings and numbered clauses (`1.1 ...`), like the files in `data/contracts/`; it's indexed and reviewed automatically. Uploaded agreements join the Q&A corpus, so Q&A scores measured on the original four may shift.
 
 **Windows path limit:** if `pip` fails with `WinError 206 ... filename too long`, move the project to a shorter path (e.g. `C:\code\recital`).
 
@@ -112,11 +139,21 @@ mlflow ui --backend-store-uri sqlite:///mlflow.db               # browse runs at
 
 String matching is a deliberately simple grader; see the roadmap.
 
+Risk review (`eval/run_review_eval.py`, labels in `eval/review_labels.json`):
+
+- `recall`: share of labelled risky clauses that got a flag.
+- `precision`: share of flags that land on risky clauses. Clauses labelled as judgement calls are not scored either way.
+- `false_alarms`: flags on clauses that aren't risky.
+- `traps_hit`: flags on clauses labelled "looks risky but is standard" (a capped price increase, a ban on training with customer data).
+
+The labels were written by hand, not by a lawyer, and the set is small (5 agreements, 8 risky clauses, 23 labelled traps). It's for comparing settings against each other, not for claiming an absolute accuracy.
+
 ## Roadmap
 
 1. **Reranker**: a cross-encoder over the top 20 results.
 2. **Real contracts**: PDF ingestion with page-level citations, evaluated on CUAD (510 real contracts with expert labels).
 3. **Party filtering**: when a question names a party ("Northwind"), search only that party's agreements.
 4. **Faithfulness judge**: check each sentence against its cited clause and flag unsupported claims.
+5. **Risk review from lawyers' decisions**: every confirm or dismiss in the queue is a free label. Feed them back as few-shot examples per check, and grow the risk test set from them.
 
 The contracts in `data/contracts/` are fictional and for demonstration only. Nothing here is legal advice.

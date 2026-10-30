@@ -4,6 +4,11 @@ rem Ollama must be running for answers (open the Ollama app if it isn't).
 title Recital
 cd /d "%~dp0"
 call :find_python
+rem First run: build the React UI (needs Node.js).
+if not exist "frontend\dist\index.html" (
+  echo Building the web UI, one time...
+  pushd frontend && call npm install && call npm run build && popd
+)
 "%PY%" app.py
 goto :eof
 

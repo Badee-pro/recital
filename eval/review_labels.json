@@ -1,0 +1,77 @@
+{
+  "_about": "Hand labels for the AI risk review (python -m eval.run_review_eval). 'risky': clauses a lawyer should see, with the check that should catch them. 'standard': clauses that look like a checklist risk but are market-standard or protective, so flagging them is a false alarm. 'either': judgement calls, not scored. Any flag on a clause not listed here also counts as a false alarm.",
+  "documents": {
+    "dpa_quillon_cirrus": {
+      "risky": {},
+      "standard": {
+        "dpa_quillon_cirrus#4.1": "48-hour breach notice is faster than the 72-hour norm",
+        "dpa_quillon_cirrus#9.1": "3x-fees cap for data breaches is higher than the general cap, which favours the controller",
+        "dpa_quillon_cirrus#1.2": "forbids processing special categories of data unless instructed",
+        "dpa_quillon_cirrus#3.3": "processor stays fully liable for sub-processors"
+      },
+      "either": {
+        "dpa_quillon_cirrus#4.2": "processor can't notify regulators without approval; reasonable for a controller, debatable"
+      }
+    },
+    "msa_northwind_quillon": {
+      "risky": {
+        "msa_northwind_quillon#8.1": "auto_renewal"
+      },
+      "standard": {
+        "msa_northwind_quillon#2.4": "rate increases capped at 5% once a year, 60 days' notice",
+        "msa_northwind_quillon#2.3": "invoice disputes, not a breach notice",
+        "msa_northwind_quillon#6.1": "provider defends customer against third-party IP claims",
+        "msa_northwind_quillon#6.2": "customer defends only claims from data it supplies",
+        "msa_northwind_quillon#7.1": "mutual exclusion of consequential damages",
+        "msa_northwind_quillon#7.2": "mutual 12-month fee cap",
+        "msa_northwind_quillon#7.3": "standard carve-outs from the cap",
+        "msa_northwind_quillon#8.2": "mutual termination for uncured material breach"
+      },
+      "either": {
+        "msa_northwind_quillon#8.3": "only the customer may terminate for convenience; one-sided, but in the customer's favour"
+      }
+    },
+    "nda_harbor_lumen": {
+      "risky": {},
+      "standard": {
+        "nda_harbor_lumen#5.1": "fixed two-year term, no renewal",
+        "nda_harbor_lumen#9.1": "mutual right to seek injunctive relief"
+      },
+      "either": {}
+    },
+    "saas_vantage_orbital": {
+      "risky": {
+        "saas_vantage_orbital#5.1": "auto_renewal"
+      },
+      "standard": {
+        "saas_vantage_orbital#2.2": "renewal increases capped at the lesser of 7% or CPI",
+        "saas_vantage_orbital#4.1": "forbids training models on subscriber data",
+        "saas_vantage_orbital#4.2": "aggregated, de-identified usage statistics only",
+        "saas_vantage_orbital#5.2": "mutual termination for uncured material breach",
+        "saas_vantage_orbital#6.1": "mutual 12-month fee cap",
+        "saas_vantage_orbital#6.2": "separate $2M cap for data breaches"
+      },
+      "either": {
+        "saas_vantage_orbital#2.3": "suspension for non-payment after notice; common but worth a look"
+      }
+    },
+    "vendor_acme_birchwood": {
+      "risky": {
+        "vendor_acme_birchwood#2.2": "unilateral_change",
+        "vendor_acme_birchwood#3.1": "data_use",
+        "vendor_acme_birchwood#4.1": "auto_renewal",
+        "vendor_acme_birchwood#4.2": "termination",
+        "vendor_acme_birchwood#5.1": "liability",
+        "vendor_acme_birchwood#5.2": "indemnity"
+      },
+      "standard": {
+        "vendor_acme_birchwood#3.2": "24-hour breach notice",
+        "vendor_acme_birchwood#4.3": "mutual termination for uncured material breach",
+        "vendor_acme_birchwood#5.3": "vendor defends customer against third-party IP claims"
+      },
+      "either": {
+        "vendor_acme_birchwood#2.3": "high late-payment interest, but not on the checklist"
+      }
+    }
+  }
+}
